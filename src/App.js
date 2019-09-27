@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Navbar, Button} from 'react-bootstrap';
+import {Button, Navbar} from 'react-bootstrap';
 import './App.css';
+import Search from "./Search/Search";
 
 class App extends Component {
     goTo(route) {
@@ -31,7 +32,7 @@ class App extends Component {
                 <Navbar fluid>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a href="#">Auth0 - React</a>
+                            <a href="#">jOOQ Flights</a>
                         </Navbar.Brand>
                         <Button
                             bsStyle="primary"
