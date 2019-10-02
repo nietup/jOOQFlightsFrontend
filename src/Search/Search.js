@@ -19,7 +19,7 @@ class Search extends Component {
         //     "timeRange": values.timeRange
         // })
         axios.post(`${API_URL}/flight-search`, {
-            "sourceCity": "Warsawab",
+            "sourceCity": "Warsawabab",
             "destinationCity": "Dubai",
             "startTime": "2019-09-19T15:00:00+02:00",
             "timeRange": 100

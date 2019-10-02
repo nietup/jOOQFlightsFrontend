@@ -5,11 +5,12 @@ import axios from "axios";
 import {API_URL} from "../constants";
 import queryString from 'querystring';
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
+import {Redirect} from "react-router";
 
 class Passenger extends Component {
     constructor(props) {
         super(props);
-        this.state = {flightNo: ""};
+        this.state = {flightNo: "", redirectToReferrer: false};
     }
 
     componentDidMount() {
@@ -17,7 +18,22 @@ class Passenger extends Component {
     }
 
     handleSubmit = (values, actions) => {
-        console.log(this.props);
+        const {getAccessToken, userProfile, getProfile} = this.props.auth;
+
+        if (!userProfile) {
+            getProfile((err, profile) => {
+                this.sendRequest(getAccessToken, values, profile);
+                actions.setSubmitting(false);
+                this.setState({redirectToReferrer: true});
+            });
+        } else {
+            this.sendRequest(getAccessToken, values, userProfile);
+            actions.setSubmitting(false);
+            this.setState({redirectToReferrer: true});
+        }
+    };
+
+    sendRequest = (getAccessToken, values, profile) => {
         const payload = {
             "flightNo": this.state.flightNo,
             "firstName": values.firstName,
@@ -26,27 +42,26 @@ class Passenger extends Component {
             "street": values.street,
             "city": values.city,
             "countryCode": values.country,
-            "phone": values.phone
+            "phone": values.phone,
+            "sub": profile.sub
         };
 
-        const {getAccessToken} = this.props.auth;
         const headers = {headers: {Authorization: `Bearer ${getAccessToken()}`}};
 
         axios.post(`${API_URL}/passengers`, payload, headers)
             .then(response => console.log("Great success"))
             .catch(error => ToastsStore.error(((error.response || {}).data || {}).message));
-
-        actions.setSubmitting(false);
     };
 
     render() {
+        const { redirectToReferrer } = this.state;
+
+        if (redirectToReferrer === true) {
+            return <Redirect to="/booked-flights" />
+        }
+
         return (
             <div className={"container"}>
-                <button onClick={() => {
-                    console.log(this.props.auth.getIdToken());
-                }}>
-                    props
-                </button>
                 <ToastsContainer position={ToastsContainerPosition.TOP_RIGHT} store={ToastsStore}/>
                 <h1>Passenger details</h1>
                 <Formik

@@ -8,6 +8,7 @@ import Callback from './Callback/Callback';
 import Auth from './Auth/Auth';
 import history from './history';
 import Passenger from './Passenger/Passenger';
+import BookedFlights from "./Passenger/BookedFlights";
 
 const auth = new Auth();
 
@@ -38,12 +39,19 @@ export const makeMainRoutes = () => {
                     )
                 )}/>
                 <Route path="/passenger" render={(props) => (
-                    //!auth.isAuthenticated() ? (
-                    //    <Redirect to="/home"/>
-                    //) : (
+                    !auth.isAuthenticated() ? (
+                        <Redirect to="/home"/>
+                    ) : (
                         <Passenger auth={auth} {...props} />
-                    //)
-                )} />
+                    )
+                )}/>
+                <Route path="/booked-flights" render={(props) => (
+                    !auth.isAuthenticated() ? (
+                        <Redirect to="/home"/>
+                    ) : (
+                        <BookedFlights auth={auth} {...props} />
+                    )
+                )}/>
                 <Route path="/callback" render={(props) => {
                     handleAuthentication(props);
                     return <Callback {...props} />
