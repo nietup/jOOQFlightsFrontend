@@ -12,17 +12,11 @@ class Search extends Component {
     }
 
     handleSubmit = (values, actions) => {
-        // axios.post(`${API_URL}/flight-search`, {
-        //     "sourceCity": values.startCity,
-        //     "destinationCity": values.destinationCity,
-        //     "startTime": values.startDate + "T" + values.startTime + "+00:00",
-        //     "timeRange": values.timeRange
-        // })
         axios.post(`${API_URL}/flight-search`, {
-            "sourceCity": "Warsawabab",
-            "destinationCity": "Dubai",
-            "startTime": "2019-09-19T15:00:00+02:00",
-            "timeRange": 100
+            "sourceCity": values.startCity,
+            "destinationCity": values.destinationCity,
+            "startTime": values.startDate + "T" + values.startTime + "+02:00",
+            "timeRange": values.timeRange
         })
             .then(response => this.setState({response: response.data}))
             .catch(error => this.setState({message: error.message}));
@@ -57,6 +51,9 @@ class Search extends Component {
                                 style={{display: 'block', padding: ".5rem", margin: ".5rem"}}
                                 validate={this.validateNotNull}
                             />
+                            <div>
+                                Warsaw
+                            </div>
                             {errors.startCity && touched.startCity &&
                             <div
                                 style={{color: 'red'}}>
@@ -72,6 +69,9 @@ class Search extends Component {
                                 style={{display: 'block', padding: ".5rem", margin: ".5rem"}}
                                 validate={this.validateNotNull}
                             />
+                            <div>
+                                Helsinki
+                            </div>
                             {errors.destinationCity && touched.destinationCity &&
                             <div
                                 style={{color: 'red'}}>
@@ -92,6 +92,9 @@ class Search extends Component {
                                 style={{padding: ".5rem", margin: ".5rem"}}
                                 validate={this.validateNotNull}
                             />
+                            <div>
+                                12.09.2019
+                            </div>
                             {((errors.startDate && touched.startDate) || (errors.startTime && touched.startTime)) &&
                             <div style={{color: 'red'}}>
                                 Departure time cannot be null!
